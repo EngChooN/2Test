@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // power Mode
+  "powermode.enabled": true,
+  "editor.tabSize": 2
+}
