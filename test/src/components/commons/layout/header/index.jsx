@@ -27,9 +27,7 @@ const Wrapper = styled.div`
   justify-content: flex-end;
 `;
 
-const Btns = styled.div`
-  margin-right: 370px;
-`;
+const Btns = styled.div``;
 
 const Login = styled.button`
   font-weight: 400;
@@ -55,7 +53,7 @@ const Baskets = styled.button`
   border: none;
   background-color: white;
   cursor: pointer;
-  margin-right: 250px;
+  margin-right: 50px;
 `;
 
 const UserMenu = styled.div``;
@@ -76,7 +74,7 @@ const PointBtn = styled.button`
   border: none;
   background-color: white;
   cursor: pointer;
-  margin-right: 30px;
+  margin-right: 50px;
   margin-left: 30px;
 `;
 
@@ -122,11 +120,11 @@ export default function Header() {
       {accessToken && (
         <>
           <UserMenu>
-            {data?.fetchUserLoggedIn.name}님의 포인트
-            {data?.fetchUserLoggedIn.userPoint.amount} P
+            {data?.fetchUserLoggedIn.name}님의 포인트: '
+            {data?.fetchUserLoggedIn.userPoint.amount}' POINT
             <Logout>로그아웃</Logout>
             <Baskets>장바구니 🛒</Baskets>
-            <PointBtn onClick={onClickMovePointCharge}>포인트충전</PointBtn>
+            <PointBtn onClick={onClickMovePointCharge}>포인트충전 💰</PointBtn>
           </UserMenu>
         </>
       )}

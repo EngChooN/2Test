@@ -66,6 +66,7 @@ const Tag = styled.div`
 const Btns = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-top: 21px;
 `;
 const Pick = styled.button`
   width: 152px;
@@ -76,7 +77,7 @@ const Baskets = styled.button`
   height: 100px;
 `;
 const Buy = styled.button`
-  width: 312px;
+  width: 297px;
   height: 100px;
 `;
 const PrInfoTitle = styled.div`
@@ -191,6 +192,12 @@ const Row2 = styled.div`
 const C_Contents = styled.div`
   font-weight: 400;
   font-size: 24px;
+`;
+
+const Edit = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const FETCH_PRODUCT = gql`
@@ -308,33 +315,45 @@ function ProductDetailPage() {
     }
   };
 
+  const [isEditComment, setIsEditComment] = useState("");
   // 댓글 수정버튼 누르면
-  const onClickCommentEdit = () => {
-    if (commentEdit === false) {
+  const onClickCommentEdit = (index) => (event) => {
+    // if (commentEdit === false) {
+    //   setCommentEdit(true);
+    // } else {
+    //   setCommentEdit(false);
+    // }
+    console.log(comments?.fetchUseditemQuestions);
+    console.log(event.target.id);
+    console.log(comments?.fetchUseditemQuestions[index]._id);
+    if (event.target.id === comments?.fetchUseditemQuestions[index]._id) {
       setCommentEdit(true);
-    } else {
-      setCommentEdit(false);
+      setIsEditComment(event.target.id);
     }
   };
+
+  const onClickBaskets = () => {};
 
   return (
     <Wrapper>
       <Main>
         <Img
-          src={"https://storage.googleapis.com/" + data?.fetchUseditem.images}
+          src={
+            "https://storage.googleapis.com/" + data?.fetchUseditem.images[0]
+          }
         />
         <MainInfo>
           <Name>{data?.fetchUseditem.name}</Name>
           <Price>{data?.fetchUseditem.price}원</Price>
-          <Remarks>{data?.fetchUseditem.remakrs}</Remarks>
+          <Remarks>{data?.fetchUseditem.remarks}</Remarks>
           <Tag>{data?.fetchUseditem.tags}</Tag>
           <Btns>
             <Pick>찜</Pick>
-            <Baskets>장바구니</Baskets>
+            <Baskets onClick={onClickBaskets}>장바구니</Baskets>
             <Buy onClick={onClickBuy}>바로구매</Buy>
             {data?.fetchUseditem.seller.name ===
               user?.fetchUserLoggedIn.name && (
-              <button onClick={onClickEdit}>수정하기</button>
+              <Edit onClick={onClickEdit}>수정</Edit>
             )}
           </Btns>
         </MainInfo>
@@ -367,6 +386,7 @@ function ProductDetailPage() {
               <UserName>{data?.fetchUseditem.seller.name}</UserName>
             </Userinfo>
             <CommentTitle>댓글</CommentTitle>
+            {/* 댓글 작성창 */}
             <CommentComponent useditemId={router.query.productId} />
             {comments?.fetchUseditemQuestions.map((el, index) => (
               <Comment key={index}>
@@ -376,7 +396,9 @@ function ProductDetailPage() {
                     <C_Name>{el.user.name}</C_Name>
                   </C_Main>
                   <C_Btns>
-                    <C_Edit onClick={onClickCommentEdit}>수정</C_Edit>
+                    <C_Edit onClick={onClickCommentEdit(index)} id={el._id}>
+                      수정
+                    </C_Edit>
                     <C_Delete onClick={onClickCommentDelete} id={el._id}>
                       삭제
                     </C_Delete>
@@ -385,8 +407,16 @@ function ProductDetailPage() {
                 <Row2>
                   <C_Contents>{el.contents}</C_Contents>
                 </Row2>
-                {commentEdit === true && (
-                  <CommentComponent commentEdit={commentEdit} />
+                {/* 댓글 수정창 */}
+                {commentEdit === true && isEditComment === el._id && (
+                  <CommentComponent
+                    commentEdit={commentEdit}
+                    useditemId={router.query.productId}
+                    commentsId={el._id}
+                    editContents={
+                      comments?.fetchUseditemQuestions[index].contents
+                    }
+                  />
                 )}
               </Comment>
             ))}

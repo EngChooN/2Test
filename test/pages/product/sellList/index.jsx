@@ -51,7 +51,7 @@ export default function Home() {
   const router = useRouter();
   const { data, fetchMore } = useQuery(FETCH_PRODUCTS, {
     variables: {
-      isSoldout: false,
+      isSoldout: true,
     },
   });
 

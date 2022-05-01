@@ -82,7 +82,9 @@ export default function ProductWriteContainer(props) {
 
   console.log("FETCH  " + fetchProduct?.fetchUseditem?.name);
   const onClickProductWrite = async (data) => {
-    if (fetchProduct?.fetchUseditem?.name === undefined) {
+    // if (fetchProduct?.fetchUseditem?.name === undefined) {
+    console.log(props.isEdit);
+    if (props.isEdit !== true) {
       try {
         const result = await createUseditem({
           variables: {
@@ -106,7 +108,7 @@ export default function ProductWriteContainer(props) {
       } catch (error) {
         alert(error);
       }
-    } else if (props.isEdit === true) {
+    } else {
       const editArr = [...fetchProduct?.fetchUseditem.tags, ...hashArr];
       const updateVariables = {
         updateUseditemInput: {
