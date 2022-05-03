@@ -210,6 +210,7 @@ const FETCH_PRODUCT = gql`
       price
       pickedCount
       images
+      pickedCount
       seller {
         name
         email
@@ -263,7 +264,14 @@ const PRODUCT_COMMENT_DELETE = gql`
   }
 `;
 
+const PRODUCT_PICK = gql`
+  mutation toggleUseditemPick($useditemId: ID!) {
+    toggleUseditemPick(useditemId: $useditemId)
+  }
+`;
+
 function ProductDetailPage() {
+  const [toggleUseditemPick] = useMutation(PRODUCT_PICK);
   const [commentEdit, setCommentEdit] = useState(false);
   const router = useRouter();
   const [createPointTransactionOfBuyingAndSelling] = useMutation(PRODUCT_BUY);
@@ -334,6 +342,22 @@ function ProductDetailPage() {
 
   const onClickBaskets = () => {};
 
+  const onClickProductPick = () => {
+    toggleUseditemPick({
+      variables: {
+        useditemId: router.query.productId,
+      },
+      refetchQueries: [
+        {
+          query: FETCH_PRODUCT,
+          variables: {
+            useditemId: router.query.productId,
+          },
+        },
+      ],
+    });
+  };
+
   return (
     <Wrapper>
       <Main>
@@ -348,7 +372,9 @@ function ProductDetailPage() {
           <Remarks>{data?.fetchUseditem.remarks}</Remarks>
           <Tag>{data?.fetchUseditem.tags}</Tag>
           <Btns>
-            <Pick>찜</Pick>
+            <Pick onClick={onClickProductPick}>
+              찜 {data?.fetchUseditem.pickedCount}
+            </Pick>
             <Baskets onClick={onClickBaskets}>장바구니</Baskets>
             <Buy onClick={onClickBuy}>바로구매</Buy>
             {data?.fetchUseditem.seller.name ===

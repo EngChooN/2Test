@@ -35,6 +35,8 @@ export default function ProductWritePresenter(props) {
     props.reset({ contents: props.data?.fetchUseditem.contents });
   }, [props.data]);
 
+  // 이미지 받아오는지 확인
+  console.log(props.data?.fetchUseditem.images[0]);
   return (
     <Wrapper>
       {props.isOpen && (
@@ -153,7 +155,16 @@ export default function ProductWritePresenter(props) {
               onChange={props.onChangeImg}
               ref={props.myImgRef}
             />
-            <Img src={"https://storage.googleapis.com/" + props.imgUrl} />
+            {/* 이미지url이 비어있으면, 등록이 아닌 수정이니까 fetch image를 src로 주고,
+             존재한다면, 등록이거나 수정해서 다시 올린 새로운 사진이므로 imgUrl을 src로 준다. */}
+            <Img
+              src={
+                props.imgUrl === ""
+                  ? "https://storage.googleapis.com/" +
+                    props.data?.fetchUseditem.images[0]
+                  : "https://storage.googleapis.com/" + props.imgUrl
+              }
+            />
           </ImagesBtn>
         </Images>
         <Line></Line>

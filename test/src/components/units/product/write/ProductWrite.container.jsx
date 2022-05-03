@@ -31,7 +31,6 @@ export default function ProductWriteContainer(props) {
       });
       setImgUrl(result.data?.uploadFile.url);
       alert("이미지 올리기 성공!");
-      console.log(result);
     } catch (error) {
       alert(error);
     }
@@ -44,7 +43,6 @@ export default function ProductWriteContainer(props) {
       useditemId: router.query.productId,
     },
   });
-  console.log(router.query.productId);
   const [createUseditem] = useMutation(CREATE_PRODUCT);
   const [updateUseditem] = useMutation(UPDATE_PRODUCT);
 
@@ -80,10 +78,8 @@ export default function ProductWriteContainer(props) {
     }
   };
 
-  console.log("FETCH  " + fetchProduct?.fetchUseditem?.name);
   const onClickProductWrite = async (data) => {
     // if (fetchProduct?.fetchUseditem?.name === undefined) {
-    console.log(props.isEdit);
     if (props.isEdit !== true) {
       try {
         const result = await createUseditem({
@@ -110,12 +106,14 @@ export default function ProductWriteContainer(props) {
       }
     } else {
       const editArr = [...fetchProduct?.fetchUseditem.tags, ...hashArr];
+
       const updateVariables = {
         updateUseditemInput: {
           useditemAddress: {},
         },
         useditemId: router.query.productId,
       };
+
       if (data.name !== "")
         updateVariables.updateUseditemInput.name = data.name;
 
@@ -130,13 +128,22 @@ export default function ProductWriteContainer(props) {
 
       if (hashArr !== []) updateVariables.updateUseditemInput.tags = editArr;
 
-      if (fetchProduct?.fetchUseditem.useditemAddress.address !== "") {
+      // if (address || lat || lng) {
+      //   const useditemAddress = {};
+      //   useditemAddress.address = address;
+      //   useditemAddress.lat = Number(lat);
+      //   useditemAddress.lng = Number(lng);
+      //   updateVariables.updateUseditemInput;
+      // }
+
+      if (address || lat || lng) {
         updateVariables.updateUseditemInput.useditemAddress.address = address;
         updateVariables.updateUseditemInput.useditemAddress.lat = Number(lat);
         updateVariables.updateUseditemInput.useditemAddress.lng = Number(lng);
       }
 
-      // if(fetchProduct?.fetchUseditem.images !== "") updateVariables.updateUseditemInput.images = images
+      if (imgUrl !== "") updateVariables.updateUseditemInput.images = [imgUrl];
+
       try {
         const result2 = await updateUseditem({
           variables: updateVariables,
@@ -159,7 +166,6 @@ export default function ProductWriteContainer(props) {
     setIsOpen((prev) => !prev);
   };
   const handleComplete = (data) => {
-    console.log(data);
     setAddress(data.address);
     onToggleModal();
   };

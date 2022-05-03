@@ -28,11 +28,19 @@ export default function Sidebar() {
   const [sawProduct3, setSawProduct3] = useState([]);
 
   useEffect(() => {
-    const Arr = JSON.parse(localStorage.getItem("sawProduct"));
-    // 배열의 마지막 인덱스
-    setSawProduct(Arr[Arr.length - 1].images[0]);
-    setSawProduct2(Arr[Arr.length - 2].images[0]);
-    setSawProduct3(Arr[Arr.length - 3].images[0]);
+    if (JSON.parse(localStorage.getItem("sawProduct"))) {
+      const Arr = JSON.parse(localStorage.getItem("sawProduct"));
+      // 배열의 마지막 인덱스
+      setSawProduct(Arr[Arr.length - 1].images[0]);
+      if (Arr.length >= 2) {
+        setSawProduct2(Arr[Arr.length - 2].images[0]);
+      }
+      if (Arr.length >= 3) {
+        setSawProduct3(Arr[Arr.length - 3].images[0]);
+      }
+    } else {
+      const Arr = "[]";
+    }
   });
 
   return (
